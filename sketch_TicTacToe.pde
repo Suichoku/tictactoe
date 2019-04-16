@@ -1,8 +1,7 @@
-Graphics gfx;
-Board board;
-int[] tRes;
-boolean win;
-int time;
+Graphics gfx; // does drawing
+Board board; // holds tiles
+boolean win; // game state
+int time; // current time
 
 void setup() {
   int w = 200;
@@ -16,25 +15,25 @@ void setup() {
 }
 
 void draw() {
-  if(!win){
+  if(!win){ // game is still going
     background(25);
-    gfx.drawGrid(new int[]{3, 3});
-    gfx.drawSymbols(new int[]{3, 3}, tRes, board);
+    gfx.drawGrid(new int[]{3, 3}); // draw grid
+    gfx.drawSymbols(new int[]{3, 3}, board); // draw symbols
   }
-  if(win && millis() >= time + 2000) {
+  if(win && millis() >= time + 2000) { // wait on victory screen for 2 seconds
     win = false;
-    board = new Board();
+    board = new Board(); // reset game
   }
 }
 
 void mousePressed() {
   if(mouseButton == LEFT) {
-    int[] position = gfx.normalizePosition(mouseX, mouseY);
-    int ok = board.mark(position);
-    if(ok == 0 && board.check() != 0) {
+    int[] position = gfx.normalizePosition(mouseX, mouseY); // get mouse position as tile position
+    board.mark(position); // mark tile with either X or O depending of board state
+    if(board.check() != 0) { // check if game is won or all tiles are marked
       win = true;
-      time = millis();
-      gfx.gameWin(board.check());
+      time = millis(); // get current time for delay
+      gfx.gameWin(board.check()); // draw victory screen
     };
   }
 }

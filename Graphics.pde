@@ -1,3 +1,4 @@
+// Does most of graphics
 class Graphics {
   int tileWidth;
   int tileHeight;
@@ -8,46 +9,52 @@ class Graphics {
     this.tileHeight = tileHeight;
   } // constructor
   
+  // Normalize mousePosition to tilePosition
   public int[] normalizePosition(int x, int y) {
     
     return new int[] {
-      (int) y / tileHeight,
-      (int) x / tileWidth
+      (int) y / tileHeight, // normalize y position
+      (int) x / tileWidth   // normalize x position
     }; // return
   } // method: normalizePosition
   
+  // Draw grid lines
+  // parameter: size = board size in tiles
   public void drawGrid(int[] size) {
     stroke(200);
     strokeWeight(2);
-    for(int i = 1; i < size[0]; i++) {
+    for(int i = 1; i < size[0]; i++) { // draw row lines
       line(0, i * tileHeight, width, i * tileHeight);
     } // for loop rows
-    for(int i = 1; i < size[1]; i++) {  
+    for(int i = 1; i < size[1]; i++) { // draw column lines
       line(i * tileWidth, 0, i * tileWidth, height);
     } // for loop columns
   } // method: drawGrid
   
-  public void drawSymbols(int[] size, int[] res, Board b) {
+  // Draw symbols (X & O)
+  // parameter: size = board size in tiles
+  public void drawSymbols(int[] size, Board b) {
     textAlign(CENTER, CENTER);
-    for(int i = 0; i < size[0]; i++) {
+    for(int i = 0; i < size[0]; i++) { // loop all tiles
       for(int j = 0; j < size[1]; j++) {
-        textSize(min(res[0], res[1]) * 0.8);
+        textSize(min(tileWidth, tileHeight) * 0.8);
         String t;
-        if(b.grid[i][j].state == -1) {
+        if(b.grid[i][j].state == -1) { // set symbol as O if tile state is -1
           t = "O";
-          fill(230,255,230);
+          fill(230,255,230); // very light green color
         }
-        else if(b.grid[i][j].state == 1) {
+        else if(b.grid[i][j].state == 1) { // set symbol as X if tile state is 1
           t = "X";
-          fill(255,230,230);
+          fill(255,230,230); // very light red color
         }
-        else t = " ";
+        else t = " "; // empty tile
         text(t, j * tileWidth, i * tileHeight - tileHeight * 0.1, tileWidth, tileHeight);
       } // for loop columns
     } // for loop rows
     
   } // method: drawSymbols
   
+  // draw victory screen based on winner information (winner = Board.check() return)
   public void gameWin(int winner) {
     String t = "";
     background(20,20,30);
